@@ -62,9 +62,9 @@ public class TheStack : MonoBehaviour
            
             theStack[i] = transform.GetChild(i).gameObject;
 
-            //ColorMesh(theStack[setReverse].GetComponent<MeshFilter>().mesh);
-            //setReverse--;
-        }	
+			ColorMesh(theStack[i].GetComponent<MeshFilter>().mesh);
+			//setReverse--;
+		}	
     }
 
     private void Update()
@@ -325,9 +325,7 @@ public class TheStack : MonoBehaviour
             ColorMesh(theStack[setReverse].GetComponent<MeshFilter>().mesh);
             setReverse--;
         }
-        GradientBg.instance.Start();
-
-        
+        GradientBg.instance.Start();   
     }
 
     private void DestroyRubbles(string tagName)
