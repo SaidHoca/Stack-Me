@@ -34,6 +34,7 @@ public class TheStack : MonoBehaviour
     private float tileTransition = 0.0f;
     private float tileSpeed = 1.5f; // bu sağa sola hareket hızı olacak..
     private float secondaryPosition;
+    //private float createDistance = 1.5f;
 
     private bool isMovingOnX = true;
 
@@ -127,8 +128,6 @@ public class TheStack : MonoBehaviour
         stackIndex--;
         if (stackIndex < 0) stackIndex = transform.childCount - 1;
         desiredPosition = (Vector3.down) * scoreCount;
-        //GameObject go = theStack[stackIndex];    // fazladan malzeme eklersem diye yaptığım birşeyler ama emin değilim.
-        //Instantiate(go, gameObject.transform);
         theStack[stackIndex].transform.localPosition = new Vector3(0, scoreCount, 0);
         theStack[stackIndex].transform.localScale = new Vector3(stackBounds.x,1,stackBounds.y);
         ColorMesh(theStack[stackIndex].GetComponent<MeshFilter>().mesh);
@@ -142,7 +141,7 @@ public class TheStack : MonoBehaviour
 
         colorCount++;
 
-        float f =Mathf.Abs( Mathf.Sin(colorCount*0.05f));
+        float f =Mathf.Abs( Mathf.Sin(colorCount*0.06f));
 
 
         if(chooseColorSet == 0)
@@ -213,7 +212,8 @@ public class TheStack : MonoBehaviour
 			{
             
                 SoundManager.instance.ComboSounds(combo);
-                if(PlayerPrefs.GetInt("vibration") == 1) Handheld.Vibrate();
+                //if(PlayerPrefs.GetInt("vibration") == 1) Handheld.Vibrate();
+                if (PlayerPrefs.GetInt("vibration") == 1) Vibrator.Vibrate(20);
                 if (combo > COMBO_START_GAIN)
                 {
                     stackBounds.x += STACK_BOUNDS_GAIN;
@@ -250,7 +250,8 @@ public class TheStack : MonoBehaviour
             else
             {
                 SoundManager.instance.ComboSounds(combo);
-                if (PlayerPrefs.GetInt("vibration") == 1) Handheld.Vibrate();
+                //if (PlayerPrefs.GetInt("vibration") == 1) Handheld.Vibrate();
+                if (PlayerPrefs.GetInt("vibration") == 1) Vibrator.Vibrate(20);
                 if (combo > COMBO_START_GAIN)
                 {
                     stackBounds.y += STACK_BOUNDS_GAIN;
