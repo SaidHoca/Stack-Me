@@ -43,8 +43,6 @@ public class TheStack : MonoBehaviour
     private Vector3 desiredPosition;
     private Vector3 lastTilePosition;
 
-    private Transform[] startTransforms;
-
 	private void Awake()
 	{
         if (instance == null) instance = this;
@@ -55,7 +53,6 @@ public class TheStack : MonoBehaviour
     {
         taleCount = transform.childCount;
         theStack = new GameObject[taleCount];
-        startTransforms = new Transform[taleCount];
         //setReverse = taleCount - 1;
         chooseColorSet = Random.Range(0, 4);
 		for (int i = 0; i < taleCount; i++)
@@ -92,6 +89,7 @@ public class TheStack : MonoBehaviour
         // Aşağı yönlü hareket...
         transform.position = Vector3.Lerp(transform.position, desiredPosition, STACK_MOVING_SPEED * Time.deltaTime);      
     }
+
 
 	private void CreateRubble(Vector3 pos , Vector3 scale)
 	{
@@ -198,8 +196,9 @@ public class TheStack : MonoBehaviour
                 if (stackBounds.x <= 0) return false;
                 float middle = lastTilePosition.x + t.localPosition.x / 2;
                 t.localScale = new Vector3(stackBounds.x,1,stackBounds.y);
+                
                 CreateRubble(
-                     new Vector3( (t.position.x > 0) 
+                     new Vector3( (t.position.x - lastTilePosition.x > 0) 
                      ? t.position.x +(t.localScale.x/2)
                      : t.position.x - (t.localScale.x / 2)
                      , t.position.y
@@ -207,13 +206,13 @@ public class TheStack : MonoBehaviour
                      , new Vector3(Mathf.Abs(deltaX),1,t.localScale.z)
                     );
                 t.localPosition = new Vector3(middle - (lastTilePosition.x / 2), scoreCount, lastTilePosition.z);
+                
             }
 			else
 			{
             
                 SoundManager.instance.ComboSounds(combo);
-                //if(PlayerPrefs.GetInt("vibration") == 1) Handheld.Vibrate();
-                if (PlayerPrefs.GetInt("vibration") == 1) Vibrator.Vibrate(20);
+                if (PlayerPrefs.GetInt("vibration") == 1) Vibrator.Vibrate(50);
                 if (combo > COMBO_START_GAIN)
                 {
                     stackBounds.x += STACK_BOUNDS_GAIN;
@@ -240,18 +239,20 @@ public class TheStack : MonoBehaviour
                 CreateRubble(
                      new Vector3(t.position.x
                      , t.position.y
-                     , (t.position.z > 0)
+                     , (t.position.z - lastTilePosition.z> 0)
                      ? t.position.z + (t.localScale.z / 2)
                      : t.position.z - (t.localScale.z / 2))
                      , new Vector3(t.localScale.x, 1,  Mathf.Abs(deltaZ))
                     );
-                t.localPosition = new Vector3(lastTilePosition.x, scoreCount, middle - (lastTilePosition.z/2));
+              
+                t.localPosition = new Vector3(lastTilePosition.x, scoreCount, middle - (lastTilePosition.z / 2));
+               
             }
             else
             {
                 SoundManager.instance.ComboSounds(combo);
                 //if (PlayerPrefs.GetInt("vibration") == 1) Handheld.Vibrate();
-                if (PlayerPrefs.GetInt("vibration") == 1) Vibrator.Vibrate(20);
+                if (PlayerPrefs.GetInt("vibration") == 1) Vibrator.Vibrate(50);
                 if (combo > COMBO_START_GAIN)
                 {
                     stackBounds.y += STACK_BOUNDS_GAIN;
