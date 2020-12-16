@@ -14,7 +14,7 @@ public class TheStack : MonoBehaviour
     private Color32[] oldColors;
 
     private const float BOUNDS_SIZE = 5F;
-    private const float STACK_MOVING_SPEED = 3F; // bu aşağı doğru hareket.
+    private const float STACK_MOVING_SPEED = 2.5F; // bu aşağı doğru hareket.
     private const float ERROR_MARGIN = 0.15F;
     private const float STACK_BOUNDS_GAIN = 0.25F;
     private const int COMBO_START_GAIN = 3;
@@ -91,6 +91,7 @@ public class TheStack : MonoBehaviour
     }
 
 
+
 	private void CreateRubble(Vector3 pos , Vector3 scale)
 	{
         GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -98,7 +99,8 @@ public class TheStack : MonoBehaviour
         go.transform.localScale = scale;
         go.AddComponent<Rigidbody>();
         go.transform.tag = "rubble";
-        go.GetComponent<Rigidbody>().AddForce(Vector3.down * 100);
+        go.GetComponent<Rigidbody>().mass = .5f;
+        go.GetComponent<Rigidbody>().AddForce(Vector3.down * 100);  
         go.GetComponent<MeshRenderer>().material = stackMat;
         go.GetComponent<MeshFilter>().mesh.colors32 = oldColors;
     }
