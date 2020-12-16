@@ -11,7 +11,8 @@ public class TheStack : MonoBehaviour
     public Color32[] gameColors3 = new Color32[4];
     public Color32[] gameColors4 = new Color32[4];
     public Material stackMat;
-    private Color32[] oldColors;
+    private Color32 spawnColor;
+    private Color32 rubbleColor;
 
     private const float BOUNDS_SIZE = 5F;
     private const float STACK_MOVING_SPEED = 2.5F; // bu aşağı doğru hareket.
@@ -43,6 +44,8 @@ public class TheStack : MonoBehaviour
     private Vector3 desiredPosition;
     private Vector3 lastTilePosition;
 
+    
+
 	private void Awake()
 	{
         if (instance == null) instance = this;
@@ -60,9 +63,12 @@ public class TheStack : MonoBehaviour
            
             theStack[i] = transform.GetChild(i).gameObject;
 
-			ColorMesh(theStack[i].GetComponent<MeshFilter>().mesh);
-			//setReverse--;
-		}	
+            var block = new MaterialPropertyBlock();
+            block.SetColor("_BaseColor", CreateColor()) ;
+            theStack[i].GetComponent<Renderer>().SetPropertyBlock(block);
+            //ColorMesh(theStack[i].GetComponent<MeshFilter>().mesh);
+            //setReverse--;
+        }	
     }
 
     private void Update()
@@ -102,7 +108,10 @@ public class TheStack : MonoBehaviour
         go.GetComponent<Rigidbody>().mass = .5f;
         go.GetComponent<Rigidbody>().AddForce(Vector3.down * 100);  
         go.GetComponent<MeshRenderer>().material = stackMat;
-        go.GetComponent<MeshFilter>().mesh.colors32 = oldColors;
+        var block = new MaterialPropertyBlock();
+        block.SetColor("_BaseColor", spawnColor);
+        go.GetComponent<Renderer>().SetPropertyBlock(block);
+       
     }
 
     private void MoveTile()
@@ -130,57 +139,77 @@ public class TheStack : MonoBehaviour
         desiredPosition = (Vector3.down) * scoreCount;
         theStack[stackIndex].transform.localPosition = new Vector3(0, scoreCount, 0);
         theStack[stackIndex].transform.localScale = new Vector3(stackBounds.x,1,stackBounds.y);
-        ColorMesh(theStack[stackIndex].GetComponent<MeshFilter>().mesh);
+        var block = new MaterialPropertyBlock();
+        block.SetColor("_BaseColor", CreateColor());  
+        theStack[stackIndex].GetComponent<Renderer>().SetPropertyBlock(block);
         
     }
 
-    private void ColorMesh(Mesh mesh)
-	{
-        Vector3[] vertices = mesh.vertices;
-        Color32[] colors = new Color32[vertices.Length];
 
+
+    private Color32 CreateColor()
+	{
+        rubbleColor = spawnColor;
         colorCount++;
 
-        float f =Mathf.Abs( Mathf.Sin(colorCount*0.06f));
+        float f = Mathf.Abs(Mathf.Sin(colorCount * 0.05f));
+        Debug.Log("f : " +  f + "//// colorCount : " + chooseColorSet);
 
 
-        if(chooseColorSet == 0)
-		{
-            Debug.Log("1");
-            for (int i = 0; i < vertices.Length; i++)
-            {
-                colors[i] = Lerp4(gameColors[0], gameColors[1], gameColors[2], gameColors[3], f);
-            }
-        }else if(chooseColorSet == 1)
-		{
-            Debug.Log("2");
-            for (int i = 0; i < vertices.Length; i++)
-            {
-                colors[i] = Lerp4(gameColors2[0], gameColors2[1], gameColors2[2], gameColors2[3], f);
-            }
-		}
-		else if(chooseColorSet == 2)
-		{
-            Debug.Log("3");
-            for (int i = 0; i < vertices.Length; i++)
-            {
-                colors[i] = Lerp4(gameColors3[0], gameColors3[1], gameColors3[2], gameColors3[3], f);
-            }
-        }
-        else if (chooseColorSet == 3)
-        {
-            Debug.Log("4");
-            for (int i = 0; i < vertices.Length; i++)
-            {
-                colors[i] = Lerp4(gameColors4[0], gameColors4[1], gameColors4[2], gameColors4[3], f);
-            }
-        }
+        if (chooseColorSet == 0) spawnColor = Lerp4(gameColors[0], gameColors[1], gameColors[2], gameColors[3], f);
+        else if (chooseColorSet == 1) spawnColor = Lerp4(gameColors2[0], gameColors2[1], gameColors2[2], gameColors2[3], f);
+        else if (chooseColorSet == 2) spawnColor = Lerp4(gameColors3[0], gameColors3[1], gameColors3[2], gameColors3[3], f);
+        else if (chooseColorSet == 3) spawnColor = Lerp4(gameColors4[0], gameColors4[1], gameColors4[2], gameColors4[3], f);
 
-
-        mesh.colors32 = colors;
-        oldColors = colors;
-       
+        return spawnColor;
 	}
+
+ //   private void ColorMesh(Mesh mesh)
+	//{
+ //       Vector3[] vertices = mesh.vertices;
+ //       Color32[] colors = new Color32[vertices.Length];
+
+ //       colorCount++;
+
+ //       float f =Mathf.Abs( Mathf.Sin(colorCount*0.06f));
+ //       stackColor = Lerp4(gameColors[0], gameColors[1], gameColors[2], gameColors[3], f);
+ //       Debug.Log(stackColor);
+ //       Debug.Log(colorCount);
+
+ //       if (chooseColorSet == 0)
+	//	{
+ //           for (int i = 0; i < vertices.Length; i++)
+ //           {
+ //               colors[i] = Lerp4(gameColors[0], gameColors[1], gameColors[2], gameColors[3], f);
+ //           }
+ //       }else if(chooseColorSet == 1)
+	//	{
+ //           for (int i = 0; i < vertices.Length; i++)
+ //           {
+ //               colors[i] = Lerp4(gameColors2[0], gameColors2[1], gameColors2[2], gameColors2[3], f);
+ //           }
+	//	}
+	//	else if(chooseColorSet == 2)
+	//	{
+ //           for (int i = 0; i < vertices.Length; i++)
+ //           {
+ //               colors[i] = Lerp4(gameColors3[0], gameColors3[1], gameColors3[2], gameColors3[3], f);
+ //           }
+ //       }
+ //       else if (chooseColorSet == 3)
+ //       {
+ //           for (int i = 0; i < vertices.Length; i++)
+ //           {
+ //               colors[i] = Lerp4(gameColors4[0], gameColors4[1], gameColors4[2], gameColors4[3], f);
+ //           }
+ //       }
+
+
+ //       mesh.colors32 = colors;
+ //       oldColors = colors;
+       
+	//}
+
 
     private bool PlaceTile()
 	{
@@ -211,8 +240,7 @@ public class TheStack : MonoBehaviour
                 
             }
 			else
-			{
-            
+			{       
                 SoundManager.instance.ComboSounds(combo);
                 if (PlayerPrefs.GetInt("vibration") == 1) Vibrator.Vibrate(50);
                 if (combo > COMBO_START_GAIN)
@@ -245,8 +273,7 @@ public class TheStack : MonoBehaviour
                      ? t.position.z + (t.localScale.z / 2)
                      : t.position.z - (t.localScale.z / 2))
                      , new Vector3(t.localScale.x, 1,  Mathf.Abs(deltaZ))
-                    );
-              
+                    );            
                 t.localPosition = new Vector3(lastTilePosition.x, scoreCount, middle - (lastTilePosition.z / 2));
                
             }
@@ -311,7 +338,7 @@ public class TheStack : MonoBehaviour
         // bg değiştirilecek..
         // stackların renk paleti değiştirilecek...
         if(theStack[stackIndex].GetComponent<Rigidbody>())Destroy(theStack[stackIndex].GetComponent<Rigidbody>());
-        colorCount = 0;
+        colorCount = Random.Range(0, 100); // renklerin her defasında farklı bir yerden başlamasını istiyoruz
         stackIndex = 0;
         scoreCount = 0;
         combo = 0;
@@ -328,10 +355,14 @@ public class TheStack : MonoBehaviour
         for (int i = 0; i < taleCount; i++)
         {
 
+            
+
             theStack[i].transform.localPosition = new Vector3(0, -i, 0);
             theStack[i].transform.localRotation = new Quaternion(0,0,0,0);
             theStack[i].transform.localScale = new Vector3(BOUNDS_SIZE,1,BOUNDS_SIZE);
-            ColorMesh(theStack[setReverse].GetComponent<MeshFilter>().mesh);
+            var block = new MaterialPropertyBlock();
+            block.SetColor("_BaseColor", CreateColor());
+            theStack[setReverse].GetComponent<Renderer>().SetPropertyBlock(block);
             setReverse--;
         }
         GradientBg.instance.Start();   

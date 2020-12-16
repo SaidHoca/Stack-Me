@@ -44,13 +44,8 @@ public class UIControl : MonoBehaviour
 
 	public void RestartGame()
 	{
-		// SCORLARI V.S. SIFIRLAMAYI UNUTMA... HIHG SCORE KONTROLÜ YAPMAYI UNUTMA. YADA ONU END GAME DE YAPALIM.. 
-		menuAnim.SetTrigger("cik");
-		//UnityEngine.SceneManagement.SceneManager.LoadScene(0);
-		//TheStack.instance.SetGameOver();
-		
-		TheStack.instance.StartGame();
-		
+		menuAnim.SetTrigger("cik");		
+		TheStack.instance.StartGame();	
 	}
 
 	public void OpenMenu()
@@ -107,36 +102,14 @@ public class UIControl : MonoBehaviour
 		}
 	}
 
-	public void Fog()
-	{
-		if (PlayerPrefs.GetInt("fog") == 1)
-		{
-			// sisi kapatma işlemleri
-			PlayerPrefs.SetInt("fog", 0);
-			fogImg.sprite = offSprite;
-			fogObj.SetActive(false);
-		}
-		else if (PlayerPrefs.GetInt("fog") == 0)
-		{
-			// sisi açma işlemleri
-			PlayerPrefs.SetInt("fog", 1);
-			fogImg.sprite = onSprite;
-			fogObj.SetActive(true);
-		}
-	}
 
 	private void StartSettings()
 	{
-		if (PlayerPrefs.GetInt("fog") == 1) fogImg.sprite = onSprite;
-		else if (PlayerPrefs.GetInt("fog") == 0) fogImg.sprite = onSprite;
-
 		if (PlayerPrefs.GetInt("vibration") == 1) vibrationImg.sprite = onSprite;
 		else if (PlayerPrefs.GetInt("vibration") == 0) vibrationImg.sprite = offSprite;
 
 		if (PlayerPrefs.GetInt("sound") == 1) soundImg.sprite = onSprite;
 		else if (PlayerPrefs.GetInt("sound") == 0) soundImg.sprite = offSprite;
-
-
 	}
 
 	public void Like()

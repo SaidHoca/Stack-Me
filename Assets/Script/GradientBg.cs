@@ -27,5 +27,6 @@ public class GradientBg : MonoBehaviour
 	{
         int indis = Random.Range(0, 10);
         mrenderer.material.SetTexture("_MainTex", textures[indis]);
+        
     }
 }
