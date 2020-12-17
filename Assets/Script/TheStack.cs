@@ -12,7 +12,6 @@ public class TheStack : MonoBehaviour
     public Color32[] gameColors4 = new Color32[4];
     public Material stackMat;
     private Color32 spawnColor;
-    private Color32 rubbleColor;
 
     private const float BOUNDS_SIZE = 5F;
     private const float STACK_MOVING_SPEED = 2.5F; // bu aşağı doğru hareket.
@@ -31,6 +30,7 @@ public class TheStack : MonoBehaviour
     private int taleCount;
     private int chooseColorSet;
     private int setReverse;
+    private int reklamSayaci = 0;
 
     private float tileTransition = 0.0f;
     private float tileSpeed = 1.5f; // bu sağa sola hareket hızı olacak..
@@ -149,12 +149,10 @@ public class TheStack : MonoBehaviour
 
     private Color32 CreateColor()
 	{
-        rubbleColor = spawnColor;
+       
         colorCount++;
 
         float f = Mathf.Abs(Mathf.Sin(colorCount * 0.05f));
-        Debug.Log("f : " +  f + "//// colorCount : " + chooseColorSet);
-
 
         if (chooseColorSet == 0) spawnColor = Lerp4(gameColors[0], gameColors[1], gameColors[2], gameColors[3], f);
         else if (chooseColorSet == 1) spawnColor = Lerp4(gameColors2[0], gameColors2[1], gameColors2[2], gameColors2[3], f);
@@ -312,6 +310,16 @@ public class TheStack : MonoBehaviour
             gameOver = true;
             theStack[stackIndex].AddComponent<Rigidbody>();
             UIControl.instance.OpenMenu();
+            if (reklamSayaci == 1)
+            {
+                AdsManager.instance.InterstitialReklam();
+                reklamSayaci = 0;
+			}
+			else
+			{
+                reklamSayaci++;
+			}
+            
         }
       
 	}
