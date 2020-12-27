@@ -8,8 +8,13 @@ public class SoundManager : MonoBehaviour
 
 	private AudioSource audioSource;
 
+	private int rewardedStackCounter = 12;
+
 	[SerializeField]
 	private AudioClip[] sounds;
+
+	[SerializeField]
+	private AudioClip[] rubbleSounds;
 
 	
 
@@ -31,6 +36,30 @@ public class SoundManager : MonoBehaviour
 		}
 		
 	}
+
+
+	public void RubbleSounds()
+	{
+		if (PlayerPrefs.GetInt("sound") == 1)
+		{
+			int rnd = Random.Range(0, 6);
+			audioSource.clip = rubbleSounds[rnd];
+			audioSource.PlayOneShot(audioSource.clip);
+		}
+	}
+
+	public void RewardedStacksSound()
+	{
+		if (PlayerPrefs.GetInt("sound") == 1)
+		{
+			
+			audioSource.clip = sounds[rewardedStackCounter];//12-13-14-15
+			audioSource.PlayOneShot(audioSource.clip);
+			rewardedStackCounter++;//13-14-15-16
+			if (rewardedStackCounter > 16) rewardedStackCounter = 12;
+		}
+	}
+
 
 
 
