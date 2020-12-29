@@ -353,7 +353,6 @@ public class TheStack : MonoBehaviour
 				reklamSayaci++;
 			}
 			UIControl.instance.RestartButtonActive();
-            UIControl.instance.setEndScore(scoreCount);
             
         }
       

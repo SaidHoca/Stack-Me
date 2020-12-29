@@ -10,7 +10,7 @@ public class UIControl : MonoBehaviour
 	public static UIControl instance;
 
 	[SerializeField]
-	private Text scoreText,endScoreText,restartButtonText;
+	private Text scoreText,restartButtonText;
 	[SerializeField]
 	private Text highscoreText;
 	[SerializeField]
@@ -41,7 +41,7 @@ public class UIControl : MonoBehaviour
 
 	private void Start()
 	{
-		maxFill = 400;
+		maxFill =200;
 		minFill = 1;
 		StartSettings();
 		if (firstGame)
@@ -82,11 +82,6 @@ public class UIControl : MonoBehaviour
 	public void setScore(int score)
 	{
 		scoreText.text = score.ToString();
-	}
-
-	public void setEndScore(int score)
-	{
-		endScoreText.text = "Score : " + score.ToString();
 	}
 
 	public void setMenuPanel()
@@ -228,7 +223,7 @@ public class UIControl : MonoBehaviour
 		float fill = (float)minFill / (float)maxFill;
 		restartImg.fillAmount = fill;
 		minFill++;
-		if(minFill == 400)
+		if(minFill == 200)
 		{
 			minFill = 1;
 			restartButton.enabled = true;
